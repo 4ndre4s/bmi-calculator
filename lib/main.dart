@@ -72,11 +72,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                     RaisedButton(
                       color: Theme.of(context).accentColor,
                       onPressed: () {
+                        final sizeString = _sizeController.text;
+                        final weightString = _weightController.text;
+                        if (sizeString.isEmpty) return;
+                        if (weightString.isEmpty) return;
                         setState(() {
-                          final sizeString = _sizeController.text;
-                          final weightString = _weightController.text;
-                          if (sizeString.isEmpty) return;
-                          if (weightString.isEmpty) return;
                           _bodyMassIndex = calculateBodyMassIndex(
                                   double.parse(sizeString),
                                   double.parse(weightString))
