@@ -73,14 +73,14 @@ class _HomeWidgetState extends State<HomeWidget> {
                       color: Theme.of(context).accentColor,
                       onPressed: () {
                         setState(() {
-                          if (_sizeController.text.isEmpty) return;
-                          if (_weightController.text.isEmpty) return;
-                          _bodyMassIndex =
-                              (double.parse(_weightController.text) /
-                                      (double.parse(_sizeController.text) *
-                                          double.parse(_sizeController.text)) *
-                                      10000)
-                                  .toStringAsFixed(2);
+                          final sizeString = _sizeController.text;
+                          final weightString = _weightController.text;
+                          if (sizeString.isEmpty) return;
+                          if (weightString.isEmpty) return;
+                          _bodyMassIndex = calculateBodyMassIndex(
+                                  double.parse(sizeString),
+                                  double.parse(weightString))
+                              .toStringAsFixed(2);
                         });
                       },
                       child: Text("Calculate"),
@@ -102,5 +102,9 @@ class _HomeWidgetState extends State<HomeWidget> {
             ],
           ),
         ));
+  }
+
+  double calculateBodyMassIndex(size, weight) {
+    return weight / (size * size) * 10000;
   }
 }
