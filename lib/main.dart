@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+
+import 'UserData.dart';
 
 void main() => runApp(MyApp());
 
@@ -7,104 +10,126 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'BMI-Calculator',
+        title: 'Weightloss',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          brightness: Brightness.dark,
+          brightness: Brightness.light,
           primaryColor: Color(0xff343434),
           accentColor: Color(0xff58B09C),
           fontFamily: 'Georgia',
         ),
-        home: HomeWidget());
+        home: WelcomeScreen());
   }
 }
 
-class HomeWidget extends StatefulWidget {
+class WelcomeScreen extends StatefulWidget {
   @override
-  _HomeWidgetState createState() => _HomeWidgetState();
+  _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _HomeWidgetState extends State<HomeWidget> {
-  String _bodyMassIndex;
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  final _formKey = GlobalKey<FormState>();
 
-  final _sizeController = TextEditingController();
-
-  final _weightController = TextEditingController();
+  String _name;
+  int _age;
+  String _selectedGender;
+  int _size;
+  int _weight;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('BMI-Calculator'), actions: [
-          IconButton(
-            icon: Icon(Icons.announcement),
-            onPressed: () {
-              showAboutDialog(
-                  context: context, applicationVersion: "Version 1.0");
-            },
-          )
-        ]),
+        appBar: AppBar(
+          title: Text("You are?"),
+        ),
         body: Container(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: <Widget>[
-              Column(children: <Widget>[
+          padding: EdgeInsets.all(10),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                Row(children: <Widget>[
+                  Flexible(
+                      child: TextFormField(
+                    decoration: InputDecoration(hintText: "Name"),
+                    onChanged: (name) => setState(() {
+                      _name = name;
+                    }),
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter(RegExp("[a-zA-Z]"))
+                    ],
+                  )),
+                  Spacer(),
+                  Flexible(
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(hintText: "Age"),
+                      onChanged: (age) => setState(() {
+                        _age = int.parse(age);
+                      }),
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
+                    ),
+                  )
+                ]),
+                Row(children: <Widget>[
+                  DropdownButton(
+                    hint: Text(
+                        _selectedGender != null ? _selectedGender : "Gender"),
+                    items: <String>["male", "female", "divers"]
+                        .map((String gender) {
+                      return DropdownMenuItem<String>(
+                        value: gender,
+                        child: Text(gender),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedGender = value;
+                      });
+                    },
+                  )
+                ]),
+                Row(children: <Widget>[
+                  Flexible(
+                      child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(hintText: "Size (cm)"),
+                    onChanged: (size) => setState(() {
+                      _size = int.parse(size);
+                    }),
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                  )),
+                  Flexible(
+                      child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(hintText: "Weight (kg)"),
+                    onChanged: (weight) => setState(() {
+                      _weight = int.parse(weight);
+                    }),
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                  )),
+                ]),
                 Row(
-                  children: <Widget>[
-                    Flexible(
-                        child: TextField(
-                            keyboardType: TextInputType.number,
-                            controller: _weightController,
-                            decoration: InputDecoration(hintText: "Weight"))),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Flexible(
-                        child: TextField(
-                            keyboardType: TextInputType.number,
-                            controller: _sizeController,
-                            decoration: InputDecoration(hintText: "Size"))),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     RaisedButton(
-                      color: Theme.of(context).accentColor,
-                      onPressed: () {
-                        final sizeString = _sizeController.text;
-                        final weightString = _weightController.text;
-                        if (sizeString.isEmpty) return;
-                        if (weightString.isEmpty) return;
-                        setState(() {
-                          _bodyMassIndex = calculateBodyMassIndex(
-                                  double.parse(sizeString),
-                                  double.parse(weightString))
-                              .toStringAsFixed(2);
-                        });
+                      child: Text("start"),
+                      onPressed: () async {
+                        UserData(_name, _age, _selectedGender, _size, _weight)
+                            .persist();
+                        print((await UserData.restore()).toString());
                       },
-                      child: Text("Calculate"),
                     )
                   ],
                 )
-              ]),
-              _bodyMassIndex != null
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "BMI: " + _bodyMassIndex,
-                          style: TextStyle(fontSize: 20),
-                        )
-                      ],
-                    )
-                  : Row()
-            ],
+              ],
+            ),
           ),
         ));
-  }
-
-  double calculateBodyMassIndex(size, weight) {
-    return weight / (size * size) * 10000;
   }
 }
