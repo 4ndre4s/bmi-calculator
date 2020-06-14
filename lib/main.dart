@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weightloss_mate/BmiCalculator.dart';
+import 'package:weightloss_mate/Home.dart';
 
 import 'UserData.dart';
 
@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
         ),
         home: this._isUserdataEmpty == null
             ? Scaffold()
-            : this._isUserdataEmpty ? WelcomeScreen() : BmiCalculator());
+            : this._isUserdataEmpty ? WelcomeScreen() : Home());
   }
 
   @override
@@ -145,10 +145,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       onPressed: () async {
                         UserData(_name, _age, _selectedGender, _size, _weight)
                             .persist();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BmiCalculator()));
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => Home()));
                       },
                     )
                   ],
