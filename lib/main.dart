@@ -145,7 +145,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       onPressed: () async {
                         UserData(_name, _age, _selectedGender, _size, _weight)
                             .persist();
-                        print((await UserData.restore()).toString());
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BmiCalculator()));
                       },
                     )
                   ],
