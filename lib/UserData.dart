@@ -23,12 +23,18 @@ class UserData {
     });
   }
 
-  static Future<Map<String, dynamic>> restore() async {
+  static Future<Map<String, dynamic>> getData() async {
     final database = await _getDatabase();
     return (await database.query("users")).last;
   }
 
   static Future<Database> _getDatabase() async {
     return await openDatabase(join(await getDatabasesPath(), "userdata.db"));
+  }
+
+  static Future<bool> isEmpty() async {
+    final usertable = await (await _getDatabase()).rawQuery(
+        "SELECT name FROM sqlite_master WHERE name='users' and type='table'");
+    return usertable.length == 0;
   }
 }

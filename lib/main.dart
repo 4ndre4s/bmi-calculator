@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weightloss_mate/BmiCalculator.dart';
 
 import 'UserData.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _isUserdataEmpty;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,7 +26,22 @@ class MyApp extends StatelessWidget {
           accentColor: Color(0xff58B09C),
           fontFamily: 'Georgia',
         ),
-        home: WelcomeScreen());
+        home: this._isUserdataEmpty == null
+            ? Scaffold()
+            : this._isUserdataEmpty ? WelcomeScreen() : BmiCalculator());
+  }
+
+  @override
+  initState() {
+    super.initState();
+    _setIsUserdataEmpty();
+  }
+
+  Future<void> _setIsUserdataEmpty() async {
+    final bool isEmpty = await UserData.isEmpty();
+    setState(() {
+      this._isUserdataEmpty = isEmpty;
+    });
   }
 }
 
