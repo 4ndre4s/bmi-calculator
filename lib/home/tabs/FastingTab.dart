@@ -10,19 +10,30 @@ class _FastingTabState extends State<FastingTab> {
   TimeOfDay _startTime;
   int _intervalLength;
 
-  int _start = 10;
-  int _current = 10;
+  int _remainingHours;
+  int _remainingMinutes;
+  int _remainingSeconds;
 
   void startTimer() {
     CountdownTimer countDownTimer = new CountdownTimer(
-      new Duration(seconds: _start),
+      new Duration(hours: _intervalLength),
       new Duration(seconds: 1),
     );
 
     var sub = countDownTimer.listen(null);
     sub.onData((duration) {
       setState(() {
-        _current = _start - duration.elapsed.inSeconds;
+        _remainingHours = Duration(hours: _intervalLength).inHours -
+            duration.elapsed.inHours -
+            1;
+        _remainingMinutes = Duration(hours: _intervalLength).inMinutes -
+            Duration(hours: _remainingHours).inMinutes -
+            duration.elapsed.inMinutes -
+            1;
+        _remainingSeconds = Duration(hours: _intervalLength).inSeconds -
+            Duration(hours: _remainingHours).inSeconds -
+            Duration(minutes: _remainingMinutes).inSeconds -
+            duration.elapsed.inSeconds;
       });
     });
 
@@ -30,12 +41,6 @@ class _FastingTabState extends State<FastingTab> {
       print("Done");
       sub.cancel();
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    startTimer();
   }
 
   @override
@@ -91,11 +96,25 @@ class _FastingTabState extends State<FastingTab> {
                   ),
                   Align(
                     alignment: Alignment.center,
-                    child: Text(_current.toString()),
+                    child: Text(_remainingHours.toString().padLeft(2, "0") +
+                        ":" +
+                        _remainingMinutes.toString().padLeft(2, "0") +
+                        ":" +
+                        _remainingSeconds.toString().padLeft(2, "0")),
                   ),
                 ],
               ),
             ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            RaisedButton(
+              onPressed: () {
+                startTimer();
+              },
+              child: Text("Los!"),
+            )
           ],
         )
       ],
