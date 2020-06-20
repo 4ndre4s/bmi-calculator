@@ -32,12 +32,12 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.utensils), title: Text("Fasting")),
+              icon: FaIcon(FontAwesomeIcons.utensils), title: Text("Fasten")),
           BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.glassWhiskey),
-              title: Text("Drinking")),
+              title: Text("Trinken")),
           BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.weight), title: Text("Weighing"))
+              icon: FaIcon(FontAwesomeIcons.weight), title: Text("Wiegen"))
         ],
         currentIndex: _selectedIndex,
         onTap: (index) {

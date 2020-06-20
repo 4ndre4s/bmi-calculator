@@ -86,7 +86,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   Flexible(
                     child: TextFormField(
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(hintText: "Age"),
+                      decoration: InputDecoration(hintText: "Alter"),
                       onChanged: (age) => setState(() {
                         _age = int.parse(age);
                       }),
@@ -98,9 +98,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ]),
                 Row(children: <Widget>[
                   DropdownButton(
-                    hint: Text(
-                        _selectedGender != null ? _selectedGender : "Gender"),
-                    items: <String>["male", "female", "divers"]
+                    hint: Text(_selectedGender != null
+                        ? _selectedGender
+                        : "Geschlecht"),
+                    items: <String>["männlich", "weiblich", "divers"]
                         .map((String gender) {
                       return DropdownMenuItem<String>(
                         value: gender,
@@ -118,7 +119,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   Flexible(
                       child: TextFormField(
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(hintText: "Size (cm)"),
+                    decoration: InputDecoration(hintText: "Größe (cm)"),
                     onChanged: (size) => setState(() {
                       _size = int.parse(size);
                     }),
@@ -129,7 +130,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   Flexible(
                       child: TextFormField(
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(hintText: "Weight (kg)"),
+                    decoration: InputDecoration(hintText: "Gewicht (kg)"),
                     onChanged: (weight) => setState(() {
                       _weight = int.parse(weight);
                     }),
@@ -141,7 +142,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Row(
                   children: <Widget>[
                     RaisedButton(
-                      child: Text("start"),
+                      child: Text("Los geht's!"),
                       onPressed: () async {
                         UserData(_name, _age, _selectedGender, _size, _weight)
                             .persist();

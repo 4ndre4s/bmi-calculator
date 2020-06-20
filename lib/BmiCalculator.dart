@@ -35,7 +35,7 @@ class _BmiCalculatorState extends State<BmiCalculator> {
                         child: TextField(
                             keyboardType: TextInputType.number,
                             controller: _weightController,
-                            decoration: InputDecoration(hintText: "Weight"))),
+                            decoration: InputDecoration(hintText: "Gewicht"))),
                   ],
                 ),
                 Row(
@@ -44,7 +44,8 @@ class _BmiCalculatorState extends State<BmiCalculator> {
                         child: TextField(
                             keyboardType: TextInputType.number,
                             controller: _sizeController,
-                            decoration: InputDecoration(hintText: "Size"))),
+                            decoration:
+                                InputDecoration(hintText: "Körpergröße"))),
                   ],
                 ),
                 Row(
@@ -64,7 +65,7 @@ class _BmiCalculatorState extends State<BmiCalculator> {
                               .toStringAsFixed(2);
                         });
                       },
-                      child: Text("Calculate"),
+                      child: Text("Berechnen"),
                     )
                   ],
                 )
